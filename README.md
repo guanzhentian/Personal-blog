@@ -5,3 +5,8 @@
 ### Use Express,hanlebars,mongoose
 
 ### The mongoose connect **('mongodb://localhost/arcs')**
+
+
+### npm install
+
+### node app.js
