@@ -1,0 +1,104 @@
+{{#section 'head'}}
+   <style>
+      .divbtn{
+        display: block;
+        margin-top: 20px;
+        width: 80px;
+      }
+      #leibie{
+         height: 25px;
+      }
+      .pointer{
+         cursor: pointer;
+      }
+   </style>
+{{/section}}
+
+{{#section 'top'}}
+<div class="center-block clearfix" style="width:100px">
+   <h3>Article</h3>
+</div>
+{{/section}}
+<hr>
+<div id="leibie">
+   
+</div>
+<hr style="border-color:#FF9933" id="divStart">
+<div id="showArc">
+   
+</div>
+{{#section 'jquery'}}
+<script>
+   $(window).ready(function(){
+      $.ajax({
+         url: '/arc',
+         type: 'POST',
+         success:function(data){ 
+            var leibie = {};             
+            for(var i in data){
+               var a = document.createElement('a');
+               $(a).addClass('btn btn-primary divbtn pull-right');
+               $(a).text("阅读全文");
+               $(a).attr("href",'/arc/'+data[i].url);
+               
+               var div = document.createElement('div');
+               $(div).addClass('jumbotron');
+               
+               var h2 = document.createElement('h2');
+               $(h2).text(data[i].title);
+               
+               var small =document.createElement("small");
+               $(small).text(data[i].content).addClass('text-muted');
+
+               $(div).append(h2).append(small).append(a);
+               $("#showArc").prepend(div);
+
+               if(leibie[data[i].leibie] === undefined)
+                  leibie[data[i].leibie] = 1;
+               else
+                  leibie[data[i].leibie]++;
+            }
+            var message = "分类： "
+            for(var key in leibie)
+            {
+                message +="<a class='pointer' id="+key+">"+key+"("+leibie[key]+")</a>  ";
+            }
+            $('#leibie').append(message);
+            $("a.pointer").each(function(index, el) {
+               this.addEventListener("click",function(event) {
+                  $.ajax({
+                     url: '/getLei',
+                     type: 'POST',
+                     data: {"leibie": this.id},
+                     success:function(data){
+                        $("#showArc").empty();      
+                        for(var i in data){
+                           var a = document.createElement('a');
+                           $(a).addClass('btn btn-primary divbtn pull-right');
+                           $(a).text("阅读全文");
+                           $(a).attr("href",'/arc/'+data[i].url);
+                           
+                           var div = document.createElement('div');
+                           $(div).addClass('jumbotron');
+                           
+                           var h2 = document.createElement('h2');
+                           $(h2).text(data[i].title);
+                           
+                           var small =document.createElement("small");
+                           $(small).text(data[i].content).addClass('text-muted');
+
+                           $(div).append(h2).append(small).append(a);
+                           $("#showArc").prepend(div);
+                        }
+                     },
+                     error:function(err){
+                        console.error(err);
+                     }
+                  });
+               });
+            });
+         }
+      });
+   });
+</script>
+{{/section}}

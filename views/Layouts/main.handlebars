@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Gzt's Blog</title>
+	{{#if showTests}}
+		<link rel="stylesheet" href="/vendor/mocha.css">
+	{{/if}}
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<style>
+		body{
+			padding-top: 60px;
+		}
+		.jumbotron{
+			background-color:white;
+			transition:margin-top 0.15s,  margin-bottom 0.15s,box-shadow 0.5s,color 0.5s ,border-color 1s,background-color 0.5s;
+ 			border: 1px solid #CCCCCC;
+ 			cursor: pointer;
+ 			padding-top: 15px;
+ 			min-height: 198px;
+		}
+		.jumbotron:hover,
+		.jumbotron:active{
+			margin-top: 50px;
+			margin-bottom: 40px;
+			box-shadow:  0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+			background-color: #FF9933;
+			color: white; 
+			/* border-color: black */
+		}
+		.showText{
+			margin-top: 20px;
+			padding: 20px;
+		}
+		.btn-default{
+			color: #777;
+		}
+		.well{
+			background-color: white;
+		}
+		.commentFrom{
+			margin-top: 100px;
+		}
+		.commentDiv{
+			margin-top: 100px;
+		}
+		.raw{
+			padding: 5px;
+			border: 1px solid #cccccc;
+			margin-bottom: 20px;
+		}
+		.rightB{
+			border-right:  1px solid #cccccc
+		}
+	</style>
+	{{{_sections.head}}}
+</head>
+<body>
+	<header>
+		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+			<div class="container">
+				<div class="navbar-header">
+					<a href="/"><img src="/img/logo3.png" alt="logo" class="navbar-brand"></a>
+					<a  class="navbar-brand" href="/">Gzt's blog</a>
+				</div>
+				<div>
+					<ul class="nav navbar-nav">
+						<li class="navLi"><a href="/arc">Article</a></li>
+						<li class="navLi"><a href="/about">About me</a></li>
+					</ul>
+					{{#if login}}
+					<form class="navbar-form navbar-right" action="/quit" method="POST" >
+							<a href="/back" class=" btn btn-default  btn-sm">进入后台系统</a>	
+							<button type="submit" id="quitBtn" class="btn-sm btn btn-default ">注销</button>
+							
+					</form>
+					{{else}}
+						<a class="btn btn-default navbar-btn navbar-right btn-sm" href="/login">登录</a>
+					{{/if}}
+				</div>
+			</div>
+		</nav>		
+	</header>
+	{{{_sections.top}}}
+	<div class="container mainDiv">	
+	{{#if flash}}
+		<div class="alert  alert-{{flash.type}}">
+			<button type="button" class="close" id="closeBtn">
+				&times;
+			</button>
+			<strong>{{flash.intro}}</strong>{{{flash.message}}}
+		</div>
+	{{/if}}
+	{{#if arc}}
+		<div>
+			<h1 class="text-center " id="arcTitle">{{arc.title}}</h1>
+			<br>
+			<p class="text-muted">创建时间：{{arc.time}}  &nbsp;&nbsp;  阅读人数：{{arc.read}}  &nbsp;&nbsp;  评论数：{{arc.comment.number}} &nbsp;&nbsp;  类别：{{arc.leibie}}</p>
+		</div>
+		<hr>
+	{{/if}}
+	{{{body}}}
+	
+
+	{{#if arc}}
+		<form class="form-horizontal commentFrom">
+			<div class="form-group">
+				<legend>发表评论</legend>
+				<label for="name" class="col-sm-2">姓名</label>
+				<div class="col-sm-8">
+					<input type="text" name="name" class="form-control " id="comName" placeholder="请输入姓名" required >
+				</div>	
+			</div>
+			<div class="form-group">
+				<label for="email" class="col-sm-2">邮箱</label>
+				<div class="col-sm-8">
+					<input type="text" name="email" class="form-control " id="comEmail" placeholder="请输入邮箱，此处不会展示。" required >
+				</div>	
+			</div>
+			<div class="form-group">
+				<label for="comment" class="col-sm-2">评论内容</label>
+				<div class="col-sm-8">
+					<textarea name="comment" class="form-control "  placeholder="请评论内容。"  id="comText" rows="5" style="resize:none" required></textarea> 
+				</div>	
+			</div>
+			<button class="col-sm-offset-2 btn btn-info " id="fabiao">发表</button>
+		</form>
+	{{/if}}
+	{{#if arc}}
+		{{#if arc.comment.number}}
+			<hr>
+			<div class="commentDiv">
+			<h1 style="margin-bottom:40px">评论</h1>
+			{{#each arc.comment.content}}
+				<div class="raw bg-info col-sm-12">
+				<div class="col-sm-2 rightB">
+					<span>{{num}}</span>
+	
+					<span >用户名：{{name}}</span >
+				</div>
+				<div class="col-sm-3 rightB">
+					<span class="pull-left">时间：</span >{{time}}
+				</div>
+				<div class="col-sm-6 ">
+					<span class="pull-left">评论内容：</span >{{con}}
+				</div>
+				{{#if ../login}}
+					<button class="col-sm-1 btn btn-danger btn-sm">删除</button>
+				{{/if}}
+				</div>
+			{{/each}}
+			</div>
+		{{/if}}
+	{{/if}}
+	{{#if showTests}}
+		<div id="mocha"></div>
+		<script src="/vendor/mocha.js"></script>
+		<script src="/vendor/chai.js"></script>
+		<script>
+			mocha.ui('tdd');
+			var assert = chai.assert;
+		</script>
+		<script src="/qa/test-global.js"></script>
+		{{#if pageTestScript}}
+			<script src="{{pageTestScript}}"></script>
+		{{/if}}
+		<script>mocha.run();</script>
+	{{/if}}	
+	</div>
+	<script src="/js/jquery-3.2.1.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+	{{{_sections.jquery}}}
+	<script type="text/javascript">
+		$("#closeBtn").click(function() {
+			$(this).parent().hide("fast");
+		});
+		$('#fabiao').click(function(event) {
+			var suzhu = [];
+			suzhu['name'] = $('#comName').val();
+			suzhu['email'] = $('#comEmail').val();
+			suzhu['con'] = $('#comText').val();
+			suzhu['num'] = getNum(suzhu);
+			
+		});
+
+		function getNum(suzhu){
+			var time = new Date();
+			$.ajax({
+				url: '/getComNum',
+				type: 'POST',
+				dataType: 'json',
+				data: {"title": $('#arcTitle').text(),},
+				success:function(data){
+					$.ajax({
+					url: '/updata',
+					type: 'POST',
+					data: {
+						"name":suzhu['name'],
+						"email":suzhu['email'],
+						"con":suzhu['con'],
+						"num":data.num,
+						"time":time.toLocaleString().split("GMT")[0],
+						"title": $('#arcTitle').text(),
+						
+					},
+					success:function(data){
+						alert('评论成功！请刷新页面查看');
+						window.location.reload();
+					},
+					error:function(err){
+						console.log(err);
+					}
+			});
+				},
+				error:function(err){
+					console.log(err);
+				}
+			});
+			
+		}
+	</script>	
+</body>
+</html>

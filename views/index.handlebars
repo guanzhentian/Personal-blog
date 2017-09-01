@@ -1,0 +1,52 @@
+{{#section 'head'}}
+	<style>
+	.mainDiv{
+		width:100%;
+		height:800px;
+		background-color:#FF9933;
+	}
+	#showDiv{
+		padding-top: 250px;
+		margin: 0 auto;
+		width: 300px;
+	}	
+	body{
+		padding:0;
+	}
+	.btnDiv{
+		margin-top: 150px;
+	}
+	.btn{
+		width: 100px;
+	}
+	.leftBtn{
+		transition: background-color 0.3s,width 0.3s,padding-top 0.3s;
+		background-color:rgb(45,45,45);
+		color: rgb(221, 221, 221);
+	}
+	.leftBtn:active,
+	.leftBtn:hover{
+		color: rgb(221, 221, 221);
+		background-color: rgb(51, 51, 51);
+		width: 120px;
+		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	}
+	.rightBtn{
+		transition: background-color 0.3s,width 0.3s,padding-top 0.3s;
+		background-color: #CCCCCC;
+		color:rgb(221, 221, 221) ;
+	}
+	.rightBtn:active,
+	.rightBtn:hover{
+
+	}
+	</style>
+{{/section}}
+<div id="showDiv">
+	<img src="/img/logo3.png" alt="logo" style="display:block;padding-left:85px ">
+	<div class="btnDiv">
+		<a href="/arc" class="btn leftBtn pull-left">文章</a>
+		<a href="/about" class="btn leftBtn pull-right">关于</a>
+	</div>
+	
+</div>

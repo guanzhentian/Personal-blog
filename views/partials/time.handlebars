@@ -1,0 +1,15 @@
+<div class="jumbotron">
+	<h1>First partials</h1>
+	<h2>time:<span id="showTime"></span></h2>
+</div>
+{{#section 'jquery'}}
+<script>
+	$(window).ready(
+		setInterval(function(){
+			var time = new Date();
+			$("#showTime").text(time.toLocaleDateString()+time.toTimeString());
+		},1000)
+		);
+
+</script>
+{{/section}}
